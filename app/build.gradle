@@ -1,0 +1,53 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 21
+    buildToolsVersion "21.1.2"
+
+    defaultConfig {
+        applicationId "com.gdg.testsigningconfig"
+        minSdkVersion 16
+        targetSdkVersion 21
+        versionCode 1
+        versionName "1.0"
+    }
+
+    dexOptions {
+        incremental false
+        preDexLibraries = false
+        jumboMode = false
+        javaMaxHeapSize "2048M"
+    }
+
+    //If uncommented - set the environment variable before Running this
+//    storePassword System.getenv("KSTOREPWD")
+//    keyPassword System.getenv("KEYPWD")
+
+    //If uncommented - Run this from console to avoid null console object.
+//    storePassword new String(System.console().readPassword("\nKeystore password: "))
+//    keyPassword new String(System.console().readPassword("\nKey password: "))
+
+    signingConfigs {
+        release {
+            keyAlias 'test'
+            storeFile file('../keystore/testsigningconfig.keystore')
+//            storePassword 'signingconfig'
+//            keyPassword 'signingconfig'
+
+            storePassword new String(System.console().readPassword("\nKeystore password: "))
+            keyPassword new String(System.console().readPassword("\nKey password: "))
+        }
+    }
+    buildTypes {
+        release {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
+        }
+    }
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile 'com.android.support:appcompat-v7:21.0.3'
+}
